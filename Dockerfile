@@ -9,7 +9,7 @@ ARG HIVE_VERSION
 # Set HIVE_VERSION from arg if provided at build, env if provided at run, or default
 # https://docs.docker.com/engine/reference/builder/#using-arg-variables
 # https://docs.docker.com/engine/reference/builder/#environment-replacement
-ENV HIVE_VERSION=${HIVE_VERSION:-3.1.2}
+ENV HIVE_VERSION=${HIVE_VERSION:-3.1.3}
 
 ENV HIVE_HOME /opt/hive
 ENV PATH $HIVE_HOME/bin:$PATH
@@ -17,16 +17,16 @@ ENV HADOOP_HOME /opt/hadoop-$HADOOP_VERSION
 
 WORKDIR /opt
 
-RUN sed -i 's/^.*$/deb http:\/\/deb.debian.org\/debian\/ buster main\ndeb-src http:\/\/deb.debian.org\/debian\/ buster main\ndeb http:\/\/deb.debian.org\/debian-security\/ buster\/updates main\ndeb-src http:\/\/deb.debian.org\/debian-security\/ buster\/updates main/g' /etc/apt/sources.list
+RUN sed -i 's/^.*$/deb http:\/\/mirrors.tuna.tsinghua.edu.cn\/debian\/ buster main\ndeb-src http:\/\/mirrors.tuna.tsinghua.edu.cn\/debian\/ buster main\ndeb http:\/\/mirrors.tuna.tsinghua.edu.cn\/debian-security\/ buster\/updates main\ndeb-src http:\/\/mirrors.tuna.tsinghua.edu.cn\/debian-security\/ buster\/updates main/g' /etc/apt/sources.list
 
 #Install Hive and PostgreSQL JDBC
 #Install Hive and PostgreSQL JDBC
 RUN apt-get update && apt-get install -y wget procps && \
-	wget https://archive.apache.org/dist/hive/hive-$HIVE_VERSION/apache-hive-$HIVE_VERSION-bin.tar.gz && \
-	tar -xzvf apache-hive-$HIVE_VERSION-bin.tar.gz && \
-	mv apache-hive-$HIVE_VERSION-bin hive && \
-	wget https://jdbc.postgresql.org/download/postgresql-9.4.1212.jar -O $HIVE_HOME/lib/postgresql-jdbc.jar && \
-	rm apache-hive-$HIVE_VERSION-bin.tar.gz && \
+	wget https://mirrors.tuna.tsinghua.edu.cn/apache/hive/hive-3.1.3/apache-hive-3.1.3-bin.tar.gz && \
+	tar -xzvf apache-hive-3.1.3-bin.tar.gz && \
+	mv apache-hive-3.1.3-bin hive
+RUN wget https://jdbc.postgresql.org/download/postgresql-9.4.1212.jar -O $HIVE_HOME/lib/postgresql-jdbc.jar && \
+	rm apache-hive-3.1.3-bin.tar.gz && \
 	apt-get --purge remove -y wget && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
